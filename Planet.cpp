@@ -209,26 +209,12 @@ bool Planet::do_war(bool verb_in, bool is_gen, bool median, std::vector<General>
         
     }
     
-    //increment the number of battles in galaxy class. need to be  aparamter from the glaazy class an d
-    //not a member of planet class because there are going to be multiple planets.
-    //I can't even fathom how this doesnt work because it literally ONLY RUNS WHEN A BATTLE HAPPENS
+    //increment the number of battles in galaxy class. needs to be a paramter from the galaxy class and
+    //not a member of planet class because there are going to be multiple planets (therefore passed by reference)
     if(troops_lost > 0){
         ++num_b;
     }
     
-    /*
-    if(median){
-        median_first_half.push(troops_lost);
-        if(median_first_half.size() >= median_second_half.size() + 2){
-            median_second_half.push(median_first_half.top());
-            median_first_half.pop();
-        }
-         if(median_second_half.size() >= median_first_half.size() + 2){
-             median_first_half.push(median_second_half.top());
-             median_second_half.pop();
-         }
-    }
-    */
     
     //this is for the first case where we have to add somehting to the max pq first
     if(median && median_first_half.empty() && troops_lost > 0){
@@ -241,6 +227,7 @@ bool Planet::do_war(bool verb_in, bool is_gen, bool median, std::vector<General>
     //already in the first half you add that to the first half
     if(median && troops_lost < median_first_half.top() && troops_lost > 0){
         median_first_half.push(troops_lost);
+        
         //if the size of the first half is 2 greater after the add then move the top
         //to the min pq second half and it will now be the top element of that pq and then you pop
         //from the first half and the sizes are now equal
@@ -249,6 +236,7 @@ bool Planet::do_war(bool verb_in, bool is_gen, bool median, std::vector<General>
             median_first_half.pop();
         }
     }
+    
     //conversely if the num troops is greater than the top of the first half
     //then add numtroops to the second half because it is bigger than the first
     else if (median && troops_lost > median_first_half.top() && troops_lost > 0){
